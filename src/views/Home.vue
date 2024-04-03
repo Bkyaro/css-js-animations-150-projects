@@ -1,11 +1,17 @@
 <template>
-  <div ref="homeEl" class="home">
-    <span ref="markEl" class="mark">TEST</span>
-    <div ref="itemEl" class="container">
-      <div v-for="(item, index) in mockData" :key="index" class="item">
-        {{ item.name }}
+  <div class="home" :class="{ 'home-dark': darkMode }">
+    <span
+      class="mark"
+      :class="{ 'mark-dive': diving, 'mark-dive-hide': divingHide }"
+      >TEST</span
+    >
+    <transition name="fade">
+      <div v-if="showItems" class="container">
+        <div v-for="(item, index) in mockData" :key="index" class="item">
+          {{ item.name }}
+        </div>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -14,48 +20,42 @@ export default {
   data() {
     return {
       name: "Home",
+      darkMode: false,
+      diving: false,
+      divingHide: false,
+      showItems: false,
       mockData: [
-        {
-          name: "animation1",
-        },
-        {
-          name: "animation2",
-        },
-        {
-          name: "animation2",
-        },
-        {
-          name: "animation2",
-        },
-        {
-          name: "animation2",
-        },
-        {
-          name: "animation2",
-        },
-        {
-          name: "animation2",
-        },
+        { name: "animation1" },
+        { name: "animation2" },
+        { name: "animation2" },
+        { name: "animation2" },
+        { name: "animation2" },
+        { name: "animation2" },
+        { name: "animation2" },
       ],
     };
   },
   mounted() {
-    this.$nextTick(() => {
-      setTimeout(() => {
-        this.$refs.homeEl.classList.add("home-dark");
-      }, 500);
-      setTimeout(() => {
-        this.$refs.markEl.classList.add("mark-dive");
-      }, 1500);
-      setTimeout(() => {
-        this.$refs.markEl.classList.add("mark-dive-hide");
-        this.$refs.itemEl.classList.add("container-show");
-      }, 2500);
-    });
+    setTimeout(() => {
+      this.darkMode = true;
+    }, 500);
+    setTimeout(() => {
+      this.diving = true;
+    }, 1500);
+    setTimeout(() => {
+      this.divingHide = true;
+      this.showItems = true;
+    }, 2500);
   },
 };
 </script>
+
 <style>
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
 .home {
   position: absolute;
   top: 0;
@@ -90,6 +90,7 @@ export default {
   transform: translateZ(400px);
   opacity: 0.1;
 }
+
 .mark-dive-hide {
   display: none;
 }
@@ -100,23 +101,20 @@ export default {
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  transition: opacity 0.4s;
-  height: 0;
-  width: 0;
-  overflow: hidden;
-  opacity: 0;
 }
 
-.container-show {
-  height: auto;
-  width: auto;
-  opacity: 1;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.4s;
+}
+
+.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+  opacity: 0;
 }
 
 .item {
   border: 2px solid grey;
   border-radius: 8px;
-  /* width: calc(100% / 4 - 20px); */
   padding: 8px 12px;
   height: 120px;
   color: #fff;
