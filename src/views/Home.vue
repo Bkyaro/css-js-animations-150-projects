@@ -7,8 +7,13 @@
     >
     <transition name="fade">
       <div v-if="showItems" class="container">
-        <div v-for="(item, index) in mockData" :key="index" class="item">
-          {{ item.name }}
+        <div
+          v-for="(item, index) in mockData"
+          :key="index"
+          class="item"
+          @click="goTo(item.name)"
+        >
+          <component :is="item.name"></component>
         </div>
       </div>
     </transition>
@@ -16,6 +21,8 @@
 </template>
 
 <script>
+import Lists from "../components";
+
 export default {
   data() {
     return {
@@ -24,18 +31,24 @@ export default {
       diving: false,
       divingHide: false,
       showItems: false,
-      mockData: [
-        { name: "animation1" },
-        { name: "animation2" },
-        { name: "animation2" },
-        { name: "animation2" },
-        { name: "animation2" },
-        { name: "animation2" },
-        { name: "animation2" },
-      ],
+      mockData: Object.entries(Lists).map(([key, value]) => {
+        return {
+          name: key,
+        };
+      }),
     };
   },
+  components: {
+    // TODO..
+    ...Lists,
+  },
+  methods: {
+    goTo(projectName) {
+      this.$router.push(projectName);
+    },
+  },
   mounted() {
+    console.log("mockData", this.mockData);
     setTimeout(() => {
       this.darkMode = true;
     }, 500);
@@ -118,6 +131,10 @@ export default {
   padding: 8px 12px;
   height: 120px;
   color: #fff;
+  background: #fff;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
