@@ -3,7 +3,27 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      isClicked: false,
+    };
+  },
+  beforeCreate() {},
+  mounted() {
+    const isHome = this.$router.history.current.fullPath === "/";
+    if (!isHome) {
+      const coord = localStorage.getItem("componentCoordinate")
+        ? JSON.parse(localStorage.getItem("componentCoordinate"))
+        : null;
+
+      if (coord && coord.x && coord.y) {
+        this.$el.style.left = `${coord.x}px`;
+        this.$el.style.top = `${coord.y}px`;
+      }
+    }
+  },
+};
 </script>
 
 <style scoped>

@@ -13,7 +13,7 @@
           v-for="(item, index) in mockData"
           :key="item.routeName"
           class="item"
-          @click="startScaleAnimation(item.routeName, index)"
+          @click="startScaleAnimation(item.routeName, index, $event)"
         >
           <component :is="item.component"></component>
         </div>
@@ -49,16 +49,39 @@ export default {
     goTo(projectName) {
       this.$router.push(projectName);
     },
-    startScaleAnimation(routeName, index) {
-      // 1. 首先存储当前点击元素的索引
+    startScaleAnimation(routeName, index, event) {
+      // 存储跳转前被点击元素的坐标
+      //   const { clientX, clientY } = event;
+
+      //   localStorage.setItem(
+      //     "componentCoordinate",
+      //     JSON.stringify({
+      //       x: clientX,
+      //       y: clientY,
+      //     })
+      //   );
+
+      const clickedElement = event.target.closest(".item"); // 获取被点击的 .item 元素
+      const elementRect = clickedElement.getBoundingClientRect();
+
+      // 存储被点击元素的坐标
+      localStorage.setItem(
+        "componentCoordinate",
+        JSON.stringify({
+          x: elementRect.left + 10,
+          y: elementRect.top + 34,
+        })
+      );
+
+      // 存储当前点击元素的索引
       this.currentlyScalingIndex = index;
 
-      // 2. 开始 scale 动画（可选：根据需要调整动画时长）
+      // 开始 scale 动画（可选：根据需要调整动画时长）
       this.$nextTick(() => {
         this.$refs.scalingItem[index].classList.add("strive");
       });
 
-      // 3. 在动画结束后跳转到新路由
+      // 在动画结束后跳转到新路由
       setTimeout(() => {
         this.goTo(routeName);
       }, 650);
@@ -158,22 +181,20 @@ export default {
   border-radius: 8px;
   padding: 8px 12px;
   height: 120px;
-  color: #fff;
   background: #fff;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
   outline: 0px solid #fff;
-  transition: border 0.3s linear, border-radius 0.3s linear,
+  transition: border 0.3s linear,
     outline 0.6s cubic-bezier(0.62, 0.1, 0.87, 0.54);
 }
 
 .strive {
   outline-width: 999px;
-  border: 0px solid rgb(255, 255, 255);
-  border-radius: 0px;
   z-index: 19;
+  border: 2px solid rgb(255, 255, 255);
 }
 
 .item:hover {
