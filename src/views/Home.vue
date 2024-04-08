@@ -1,6 +1,7 @@
 <template>
   <div class="home" :class="{ 'home-dark': darkMode }">
     <span
+      v-if="isFirstVisit"
       class="mark"
       :class="{ 'mark-dive': diving, 'mark-dive-hide': divingHide }"
       >TEST</span
@@ -11,9 +12,9 @@
           v-for="(item, index) in mockData"
           :key="index"
           class="item"
-          @click="goTo(item.name)"
+          @click="goTo(item.routeName)"
         >
-          <component :is="item.name"></component>
+          <component :is="item.component"></component>
         </div>
       </div>
     </transition>
@@ -31,34 +32,45 @@ export default {
       diving: false,
       divingHide: false,
       showItems: false,
+      isFirstVisit: true,
       mockData: Object.entries(Lists).map(([key, value]) => {
         return {
-          name: key,
+          routeName: key,
+          component: value,
         };
       }),
     };
   },
   components: {
     // TODO..
-    ...Lists,
   },
   methods: {
     goTo(projectName) {
       this.$router.push(projectName);
     },
   },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.isFirstVisit = !from.name; // 判断是否从外部（非路由跳转）首次访问
+    });
+  },
   mounted() {
-    console.log("mockData", this.mockData);
     setTimeout(() => {
       this.darkMode = true;
-    }, 500);
-    setTimeout(() => {
-      this.diving = true;
-    }, 1500);
-    setTimeout(() => {
-      this.divingHide = true;
-      this.showItems = true;
-    }, 2500);
+    }, 250);
+    if (this.isFirstVisit) {
+      setTimeout(() => {
+        this.diving = true;
+      }, 1500);
+      setTimeout(() => {
+        this.divingHide = true;
+        this.showItems = true;
+      }, 2500);
+    } else {
+      setTimeout(() => {
+        this.showItems = true;
+      }, 1000);
+    }
   },
 };
 </script>
