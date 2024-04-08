@@ -123,6 +123,7 @@ export default {
   transition: all 1s cubic-bezier(1, -0.04, 0.88, 1.01);
   transform: translateZ(0px);
   opacity: 1;
+  font-family: "Anton", sans-serif;
 }
 
 .mark-dive {
@@ -164,8 +165,8 @@ export default {
   justify-content: center;
   align-items: center;
   outline: 0px solid #fff;
-  transition: border 0.3s cubic-bezier(0.62, 0.07, 0.87, 0.54),
-    outline 0.6s cubic-bezier(0.62, 0.07, 0.87, 0.54);
+  transition: border 0.3s linear, border-radius 0.3s linear,
+    outline 0.6s cubic-bezier(0.62, 0.1, 0.87, 0.54);
 }
 
 .strive {
@@ -173,5 +174,9 @@ export default {
   border: 0px solid rgb(255, 255, 255);
   border-radius: 0px;
   z-index: 19;
+}
+
+.item:hover {
+  border: 2px solid rgb(255, 255, 255);
 }
 </style>
