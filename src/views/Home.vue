@@ -9,10 +9,11 @@
     <transition name="fade">
       <div v-if="showItems" class="container">
         <div
+          ref="scalingItem"
           v-for="(item, index) in mockData"
-          :key="index"
+          :key="item.routeName"
           class="item"
-          @click="goTo(item.routeName)"
+          @click="startScaleAnimation(item.routeName, index)"
         >
           <component :is="item.component"></component>
         </div>
@@ -48,10 +49,24 @@ export default {
     goTo(projectName) {
       this.$router.push(projectName);
     },
+    startScaleAnimation(routeName, index) {
+      // 1. 首先存储当前点击元素的索引
+      this.currentlyScalingIndex = index;
+
+      // 2. 开始 scale 动画（可选：根据需要调整动画时长）
+      this.$nextTick(() => {
+        this.$refs.scalingItem[index].classList.add("strive");
+      });
+
+      // 3. 在动画结束后跳转到新路由
+      setTimeout(() => {
+        this.goTo(routeName);
+      }, 650);
+    },
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
-      vm.isFirstVisit = !from.name; // 判断是否从外部（非路由跳转）首次访问
+      vm.isFirstVisit = !from.name;
     });
   },
   mounted() {
@@ -69,7 +84,7 @@ export default {
     } else {
       setTimeout(() => {
         this.showItems = true;
-      }, 1000);
+      }, 500);
     }
   },
 };
@@ -138,7 +153,7 @@ export default {
 }
 
 .item {
-  border: 2px solid grey;
+  border: 2px solid rgb(128, 128, 128);
   border-radius: 8px;
   padding: 8px 12px;
   height: 120px;
@@ -148,5 +163,15 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  outline: 0px solid #fff;
+  transition: border 0.3s cubic-bezier(0.62, 0.07, 0.87, 0.54),
+    outline 0.6s cubic-bezier(0.62, 0.07, 0.87, 0.54);
+}
+
+.strive {
+  outline-width: 999px;
+  border: 0px solid rgb(255, 255, 255);
+  border-radius: 0px;
+  z-index: 19;
 }
 </style>
