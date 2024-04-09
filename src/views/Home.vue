@@ -4,7 +4,7 @@
       v-if="isFirstVisit"
       class="mark"
       :class="{ 'mark-dive': diving, 'mark-dive-hide': divingHide }"
-      >TEST</span
+      >Animatelization</span
     >
     <transition name="fade">
       <div v-if="showItems" class="container">
@@ -50,33 +50,23 @@ export default {
       this.$router.push(projectName);
     },
     startScaleAnimation(routeName, index, event) {
-      // 存储跳转前被点击元素的坐标
-      //   const { clientX, clientY } = event;
-
-      //   localStorage.setItem(
-      //     "componentCoordinate",
-      //     JSON.stringify({
-      //       x: clientX,
-      //       y: clientY,
-      //     })
-      //   );
-
-      const clickedElement = event.target.closest(".item"); // 获取被点击的 .item 元素
+      // 存储跳转前元素的坐标
+      const clickedElement = event.target.closest(".item").children[0]; // 定位到组件根节点
       const elementRect = clickedElement.getBoundingClientRect();
 
       // 存储被点击元素的坐标
       localStorage.setItem(
         "componentCoordinate",
         JSON.stringify({
-          x: elementRect.left + 10,
-          y: elementRect.top + 34,
+          x: elementRect.left,
+          y: elementRect.top,
         })
       );
 
       // 存储当前点击元素的索引
       this.currentlyScalingIndex = index;
 
-      // 开始 scale 动画（可选：根据需要调整动画时长）
+      // 开始无痕跳转动画
       this.$nextTick(() => {
         this.$refs.scalingItem[index].classList.add("strive");
       });
@@ -147,6 +137,9 @@ export default {
   transform: translateZ(0px);
   opacity: 1;
   font-family: "Anton", sans-serif;
+  line-break: anywhere;
+  text-align: center;
+  width: 100%;
 }
 
 .mark-dive {
@@ -186,15 +179,22 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  outline-offset: -1px;
   outline: 0px solid #fff;
   transition: border 0.3s linear,
     outline 0.6s cubic-bezier(0.62, 0.1, 0.87, 0.54);
+}
+@media (hover: none) and (pointer: coarse) {
+  .item {
+    transition: outline 0.6s cubic-bezier(0.62, 0.1, 0.87, 0.54);
+  }
 }
 
 .strive {
   outline-width: 999px;
   z-index: 19;
   border: 2px solid rgb(255, 255, 255);
+  pointer-events: none;
 }
 
 .item:hover {

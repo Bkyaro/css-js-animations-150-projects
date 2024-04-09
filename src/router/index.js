@@ -5,8 +5,6 @@ import Lists from "../components";
 
 Vue.use(VueRouter);
 
-console.log("Lists", Lists);
-
 const componentObject = Object.entries(Lists).map(([key, value]) => {
 	return {
 		path: `/${key}`,
@@ -14,8 +12,6 @@ const componentObject = Object.entries(Lists).map(([key, value]) => {
 		component: value,
 	};
 });
-
-console.log("componentObject", componentObject);
 
 const routes = [
 	{
