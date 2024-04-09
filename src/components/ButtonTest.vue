@@ -4,11 +4,6 @@
 
 <script>
 export default {
-  data() {
-    return {
-      isClicked: false,
-    };
-  },
   beforeCreate() {},
   mounted() {
     const isHome = this.$router.history.current.fullPath === "/";

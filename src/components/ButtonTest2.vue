@@ -1,5 +1,5 @@
 <template>
-  <a style="--clr: #7808d0" class="button" href="#">
+  <a style="--clr: #7808d0" class="button" href="javascript:;">
     <span class="button__icon-wrapper">
       <svg
         width="10"
@@ -32,11 +32,28 @@
 </template>
 
 <script>
-export default {};
+export default {
+  beforeCreate() {},
+  mounted() {
+    const isHome = this.$router.history.current.fullPath === "/";
+    if (!isHome) {
+      const coord = localStorage.getItem("componentCoordinate")
+        ? JSON.parse(localStorage.getItem("componentCoordinate"))
+        : null;
+
+      if (coord && coord.x && coord.y) {
+        this.$el.style.left = `${coord.x}px`;
+        this.$el.style.top = `${coord.y}px`;
+      }
+    }
+  },
+};
 </script>
+
 
 <style scoped>
 .button {
+  position: relative;
   line-height: 1;
   text-decoration: none;
   display: inline-flex;
