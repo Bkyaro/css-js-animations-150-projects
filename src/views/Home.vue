@@ -15,7 +15,8 @@
           class="item"
           @click="startScaleAnimation(item.routeName, index, $event)"
         >
-          <component :is="item.component"></component>
+
+          <Wrapper :componentName="item.component"></Wrapper>
         </div>
       </div>
     </transition>
@@ -24,6 +25,7 @@
 
 <script>
 import Lists from "../components";
+import Wrapper from "../components/Wrapper.vue";
 
 export default {
   data() {
@@ -44,6 +46,7 @@ export default {
   },
   components: {
     // TODO..
+    Wrapper: Wrapper,
   },
   methods: {
     goTo(projectName) {
@@ -63,6 +66,8 @@ export default {
         })
       );
 
+      console.log("home coord",localStorage.getItem("componentCoordinate"))
+
       // 存储当前点击元素的索引
       this.currentlyScalingIndex = index;
 
@@ -73,7 +78,7 @@ export default {
 
       // 在动画结束后跳转到新路由
       setTimeout(() => {
-        this.goTo(routeName);
+        this.goTo(`projects?name=${routeName}`);
       }, 650);
     },
   },
