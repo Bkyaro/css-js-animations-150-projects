@@ -1,4 +1,4 @@
-# css-js-animations-150-projects
+# Animatelization
 
 ## Project setup
 ```
