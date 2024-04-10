@@ -3,7 +3,11 @@
     <span
       v-if="isFirstVisit"
       class="mark"
-      :class="{ 'mark-dive': diving, 'mark-dive-hide': divingHide }"
+      :class="{
+        fonty: assetLoaded,
+        'mark-dive': diving,
+        'mark-dive-hide': divingHide,
+      }"
       >Animatelization</span
     >
     <transition name="fade">
@@ -15,7 +19,6 @@
           class="item"
           @click="startScaleAnimation(item.routeName, index, $event)"
         >
-
           <Wrapper :componentName="item.component"></Wrapper>
         </div>
       </div>
@@ -36,6 +39,7 @@ export default {
       divingHide: false,
       showItems: false,
       isFirstVisit: true,
+      assetLoaded: false,
       mockData: Object.entries(Lists).map(([key, value]) => {
         return {
           routeName: key,
@@ -66,7 +70,7 @@ export default {
         })
       );
 
-      console.log("home coord",localStorage.getItem("componentCoordinate"))
+      console.log("home coord", localStorage.getItem("componentCoordinate"));
 
       // 存储当前点击元素的索引
       this.currentlyScalingIndex = index;
@@ -88,6 +92,9 @@ export default {
     });
   },
   mounted() {
+    document.addEventListener("fontLoaded", () => {
+      this.assetLoaded = true;
+    });
     setTimeout(() => {
       this.darkMode = true;
     }, 250);
@@ -138,19 +145,27 @@ export default {
 .mark {
   font-size: 6rem;
   color: #fff;
-  transition: all 1s cubic-bezier(1, -0.04, 0.88, 1.01);
+  transition: opacity 0.3s, font-size 1s cubic-bezier(1, -0.04, 0.88, 1.01),
+    transform 1s cubic-bezier(1, -0.04, 0.88, 1.01),
+    filter 1s cubic-bezier(1, -0.04, 0.88, 1.01);
   transform: translateZ(0px);
-  opacity: 1;
+  opacity: 0;
   font-family: "Anton", sans-serif;
   line-break: anywhere;
   text-align: center;
   width: 100%;
+  filter: blur(0px);
+}
+
+.fonty {
+  opacity: 1;
 }
 
 .mark-dive {
   font-size: 7rem;
   transform: translateZ(400px);
-  opacity: 0.1;
+  /* opacity: 0.1; */
+  filter: blur(20px);
 }
 
 .mark-dive-hide {
