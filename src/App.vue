@@ -12,6 +12,6 @@
   box-sizing: border-box;
 }
 body {
-  transition: all 0.25s;
+  background-color: all 0.25s;
 }
 </style>

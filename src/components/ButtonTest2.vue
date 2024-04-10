@@ -33,9 +33,8 @@
 
 <script>
 export default {
-  props: ["coord","isHome"],
+  props: ["coord", "isHome"],
   mounted() {
-    console.log("this.isHome", this.isHome);
     if (!this.isHome) {
       if (this.coord && this.coord.x && this.coord.y) {
         this.$el.style.left = `${this.coord.x}px`;

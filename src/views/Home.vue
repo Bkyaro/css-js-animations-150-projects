@@ -132,7 +132,7 @@ export default {
   justify-content: center;
   align-items: center;
   background-color: rgba(255, 255, 255, 1);
-  transition: all 0.4s;
+  transition: background-color 0.4s;
   perspective: 200px;
   padding: 0 20px;
   overflow-y: auto;
