@@ -43,11 +43,16 @@ export default {
         this.$refs.buttonElWrap.style.left = `${this.coord.x}px`;
         this.$refs.buttonElWrap.style.top = `${this.coord.y}px`;
       }
-    }
 
-    setTimeout(() => {
-      this.$refs.buttonElWrap.classList.add("shifting");
-    }, 200);
+      setTimeout(() => {
+        let shiftCoordX =
+          window.innerWidth / 2 -
+          this.$refs.buttonElWrap.getBoundingClientRect().width / 2;
+        this.$refs.buttonElWrap.style.left = shiftCoordX + "px";
+        this.$refs.buttonElWrap.style.top = "0px";
+        this.$refs.buttonElWrap.style.width = "unset";
+      }, 200);
+    }
   },
   computed: {
     fullHtmlCode() {
@@ -103,21 +108,12 @@ button:hover::before {
 
 <style scoped>
 .element-wrapper {
-  transition: all 0.5s;
+  transition: all 250ms ease-in-out;
   position: relative;
   padding: 24px 12px;
   max-width: max-content;
 }
 
-.shifting {
-  top: 0px !important;
-  left: 0px !important;
-
-  /* display: flex;
-  justify-content: center;
-  align-items: center; */
-  max-width: unset;
-}
 button {
   cursor: pointer;
   padding: 15px 25px;
@@ -131,7 +127,6 @@ button {
   font-size: 17px;
   -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
   box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
-  /* transition: all 250ms; */
   overflow: hidden;
 }
 
@@ -147,7 +142,6 @@ button::before {
   z-index: -1;
   -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
   box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
-  /* transition: all 250ms; */
 }
 
 button:hover {
